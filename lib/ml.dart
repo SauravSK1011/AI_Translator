@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:texttospeachapp/utils/languages.dart';
 
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -16,6 +17,21 @@ class Imagetotext extends StatefulWidget {
 }
 
 class _ImagetotextState extends State<Imagetotext> {
+  Color color = Colors.grey.shade200;
+  Color buttoncolor = Colors.grey.shade200;
+  Color cardcolor = Colors.grey.shade200;
+  Color appbarbackgroundColor = Colors.grey.shade200;
+  Color bottomcolor = Colors.grey.shade400;
+  Color dropdowncolor = Colors.grey.shade200;
+  Color textcolor = Colors.deepPurpleAccent.shade700;
+  Color iconcolor = Colors.deepPurpleAccent.shade700;
+
+  // List<String> languagesfrom = ["English"];
+  // String? selectedfrom = "English";
+
+  // List<String> languagesto = ["Hindi", "Marathi"];
+  String? selectedto = "Hindi";
+  int initialindex = 1;
   late File _imagefile;
   final imagepicker = ImagePicker();
   bool isImageLoded = false;
@@ -29,21 +45,22 @@ class _ImagetotextState extends State<Imagetotext> {
   final items = <Widget>[
     const Icon(
       Icons.add_a_photo,
-      color: Colors.white,
+      color: Colors.deepPurpleAccent,
     ),
-    const Icon(Icons.menu, color: Colors.white),
-    const Icon(Icons.add_photo_alternate_rounded, color: Colors.white),
+    const Icon(Icons.menu, color: Colors.deepPurple),
+    const Icon(Icons.add_photo_alternate_rounded,
+        color: Colors.deepPurpleAccent),
   ];
 
-  translate(String text) async {
-    await translator.translate(text, to: "mr").then((value) {
+  translate(String text, String lang) async {
+    await translator.translate(text, to: lang).then((value) {
       setState(() {
         output = value;
 
         isTranslate = true;
       });
     });
-    await flutterTts.setLanguage("mr-IN");
+    await flutterTts.setLanguage(lang);
     await flutterTts.setPitch(0.7);
     await flutterTts.speak(output.toString());
   }
@@ -57,6 +74,7 @@ class _ImagetotextState extends State<Imagetotext> {
       setState(() {
         _imagefile = File(image.path);
         isImageLoded = true;
+        initialindex = 1;
       });
     }
   }
@@ -70,6 +88,7 @@ class _ImagetotextState extends State<Imagetotext> {
       setState(() {
         _imagefile = File(image.path);
         isImageLoded = true;
+        initialindex = 1;
       });
     }
   }
@@ -98,65 +117,116 @@ class _ImagetotextState extends State<Imagetotext> {
     return Scaffold(
       extendBody: true,
       appBar: AppBar(
-        title: const Center(child: Text("Translator Using ML")),
+        backgroundColor: appbarbackgroundColor,
+        title: Center(
+            child: Text(
+          "Translator Using ML",
+          style: TextStyle(color: textcolor),
+        )),
       ),
       body: Container(
-        height: MediaQuery.of(context).size.height+600,
+        // height: MediaQuery.of(context).size.height + 600,
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/peakpx5.jpg"),
+            image: AssetImage("assets/background.jpg"),
             fit: BoxFit.cover,
           ),
         ),
         child: SingleChildScrollView(
-          child: Container(height: MediaQuery.of(context).size.height+100,
-            child: Column(
-              children: [
-                // const SizedBox(
-                //   height: 50,
-                // ),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                //   children: [
-                //     ElevatedButton(
-                //         onPressed: () {
-                //           output = "";
-
-                //           finaltext = "";
-                //           _imageformcamara();
-                //         },
-                //         child: const Icon(Icons.add_a_photo)),
-                //     ElevatedButton(
-                //         onPressed: () {
-                //           output = "";
-                //           finaltext = "";
-                //           _imageformgallery();
-                //         },
-                //         child: const Icon(Icons.add_photo_alternate_rounded)),
-                //   ],
-                // ),
-                const SizedBox(
-                  height: 50,
-                ),
-                isImageLoded
-                    ? Center(
-                        child: Container(
-                          height: 250,
-                          width: 250,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            image: DecorationImage(
-                              image: FileImage(_imagefile),
-                              fit: BoxFit.fill,
+          child: Container(
+            height: MediaQuery.of(context).size.height + 100,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  isImageLoded
+                      ? Center(
+                          child: Container(
+                            height: 250,
+                            width: 250,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              image: DecorationImage(
+                                image: FileImage(_imagefile),
+                                fit: BoxFit.fill,
+                              ),
                             ),
                           ),
+                        )
+                      : Container(),
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 25, right: 25),
+                    child: Card(
+                      color: dropdowncolor,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25)),
+                      elevation: 25,
+                      child: Container(
+                        height: 70,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(
+                              "Convert to",
+                              style: TextStyle(
+                                  color: textcolor,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Container(
+                              decoration: BoxDecoration(color: color),
+                              // color: Colors.white,
+                              width: 150,
+                              child: DropdownButtonFormField<String>(
+                                decoration: InputDecoration(
+                                  hoverColor: color,
+                                  fillColor: color,
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)),
+                                    borderSide:
+                                        BorderSide(width: 5, color: color),
+                                  ),
+                                ),
+                                value: selectedto,
+                                items: Translation_languages.select_languages
+                                    .map((language) =>
+                                        DropdownMenuItem<String>(
+                                          value: language,
+                                          child: Text(
+                                            language,
+                                            style:
+                                                TextStyle(color: textcolor),
+                                          ),
+                                        ))
+                                    .toList(),
+                                onChanged: (language) =>
+                                    setState(() => selectedto = language),
+                                icon: Icon(
+                                  Icons.arrow_drop_down,
+                                  color: Colors.deepPurpleAccent,
+                                ),
+                                iconSize: 42,
+                                // // underline: SizedBox(),
+                              ),
+                            ),
+                          ],
                         ),
-                      )
-                    : Container(),
-                const SizedBox(
-                  height: 50,
-                ),
-                ElevatedButton(
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: buttoncolor,
+                    ),
                     onPressed: () {
                       setState(() {
                         isrecognize = false;
@@ -166,83 +236,100 @@ class _ImagetotextState extends State<Imagetotext> {
                       textfromImage();
                     },
                     child: isrecognize
-                        ? const Padding(
+                        ? Padding(
                             padding: EdgeInsets.all(8.0),
-                            child: Text("recognize"),
+                            child: Text(
+                              "recognize",
+                              style: TextStyle(
+                                  color: textcolor,
+                                  fontWeight: FontWeight.bold),
+                            ),
                           )
-                        : const Padding(
+                        : Padding(
                             padding: EdgeInsets.all(8.0),
                             child: CircularProgressIndicator(
-                              color: Colors.white,
+                              color: textcolor,
                             ),
-                          )),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Card(
-                      color: Colors.blueGrey,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8)),
-                      elevation: 25,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          finaltext,
-                          style:
-                              const TextStyle(color: Colors.white, fontSize: 17),
-                        ),
-                      )),
-                ),
-                Center(
-                  child: Column(
-                    children: [
-                      ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              isTranslate = false;
-                            });
-                            output = "";
-                            // finaltext = "";
-                            translate(finaltext);
-                          },
-                          child: isTranslate
-                              ? const Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text("Translate"),
-                                )
-                              : const Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: CircularProgressIndicator(
-                                    color: Colors.white,
-                                  ),
-                                )),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Card(
-                            color: Colors.blueGrey,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
-                            elevation: 25,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                output == null ? "" : output.toString(),
-                                style: const TextStyle(
-                                    color: Colors.white, fontSize: 17),
-                              ),
-                            )),
-                      ),
-                    ],
+                          ),
                   ),
-                ),
-                // Home(finaltext: finaltext)
-              ],
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Card(
+                        color: cardcolor,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)),
+                        elevation: 25,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            finaltext,
+                            style: TextStyle(color: textcolor, fontSize: 17),
+                          ),
+                        )),
+                  ),
+                  Center(
+                    child: Column(
+                      children: [
+                        ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: buttoncolor,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                isTranslate = false;
+                              });
+                              output = "";
+                              // finaltext = "";
+                              translate(
+                                  finaltext,
+                                  Translation_languages.getLanguageCode(
+                                      selectedto!));
+                            },
+                            child: isTranslate
+                                ? Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text(
+                                      "Translate",
+                                      style: TextStyle(
+                                          color: textcolor,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  )
+                                : Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: CircularProgressIndicator(
+                                      color: textcolor,
+                                    ),
+                                  )),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Card(
+                              color: cardcolor,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                              elevation: 25,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  output == null ? "" : output.toString(),
+                                  style: TextStyle(
+                                      color: textcolor, fontSize: 17),
+                                ),
+                              )),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Home(finaltext: finaltext)
+                ],
+              ),
             ),
           ),
         ),
       ),
       bottomNavigationBar: CurvedNavigationBar(
-        color: Colors.blue,
-        index: 1,
+        color: bottomcolor,
+        index: initialindex,
         height: 50,
         backgroundColor: Colors.transparent,
         items: items,
@@ -254,6 +341,7 @@ class _ImagetotextState extends State<Imagetotext> {
             _imageformcamara();
           } else if (index == 2) {
             output = "";
+
             finaltext = "";
             _imageformgallery();
           }
