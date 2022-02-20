@@ -1,67 +1,45 @@
-// import 'dart:io';
-
 // import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 // import 'package:flutter/material.dart';
-// import 'package:image_picker/image_picker.dart';
+// import 'package:texttospeachapp/ml.dart';
+// import 'package:texttospeachapp/texttranslate.dart';
 
-
- 
-  
-// class Navigation_bar extends StatefulWidget {
-//   const Navigation_bar({ Key? key }) : super(key: key);
-
+// class BottomNavigationBar extends StatefulWidget {
+//   BottomNavigationBar({Key? key,
+//   //  required this.initialindex
+//    }) : super(key: key);
+//   // int initialindex;
 //   @override
-//   State<Navigation_bar> createState() => _Navigation_barState();
+//   State<BottomNavigationBar> createState() => _BottomNavigationBarState();
 // }
 
-// class _Navigation_barState extends State<Navigation_bar> {
-//     final imagepicker = ImagePicker();
-//     _imageformgallery() async {
-//     await Future.delayed(const Duration(seconds: 1), () {});
-//     var image = await imagepicker.pickImage(source: ImageSource.gallery);
-//     if (image == null) {
-//       return null;
-//     } else {
-//       setState(() {
-//         _imagefile = File(image.path);
-//         isImageLoded = true;
-//       });
-//     }
-//   }
-
-//   _imageformcamara() async {
-//     await Future.delayed(const Duration(seconds: 1), () {});
-//     var image = await imagepicker.pickImage(source: ImageSource.camera);
-//     if (image == null) {
-//       return null;
-//     } else {
-//       setState(() {
-//         _imagefile = File(image.path);
-//         isImageLoded = true;
-//       });
-//     }
-//   }
-
+// class _BottomNavigationBarState extends State<BottomNavigationBar> {
 //   @override
 //   Widget build(BuildContext context) {
+//     Color bottomcolor = Colors.grey.shade400;
+//     int initialindex=0;
+//     final items = <Widget>[
+//       const Icon(
+//         Icons.camera,
+//         color: Colors.deepPurpleAccent,
+//       ),
+//       // const Icon(Icons.menu, color: Colors.deepPurple),
+//       const Icon(Icons.text_fields_rounded, color: Colors.deepPurpleAccent),
+//     ];
 //     return CurvedNavigationBar(
-//         color: Colors.blue,
-//         index: 1,
-//         height: 50,
-//         backgroundColor: Colors.transparent,
-//         items: items,
-//         onTap: (index) {
-//           if (index == 0) {
-//             output = "";
-
-//             finaltext = "";
-//             _imageformcamara();
-//           } else if (index == 2) {
-//             output = "";
-//             finaltext = "";
-//             _imageformgallery();
-//           }
-//         },
-//       );
+//       color: bottomcolor,
+//       index: initialindex,
+//       height: 50,
+//       backgroundColor: Colors.transparent,
+//       items: items,
+//       onTap: (index) {
+//         if (index == 0) {
+//           Navigator.push(context,
+//               MaterialPageRoute(builder: (context) => const Imagetotext()));
+//         } else if (index == 1) {
+//           Navigator.push(context,
+//               MaterialPageRoute(builder: (context) => const TextTranslate()));
+//         }
+//       },
+//     );
 //   }
 // }

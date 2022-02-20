@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:texttospeachapp/texttranslate.dart';
 import 'package:texttospeachapp/utils/languages.dart';
 
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
@@ -25,13 +27,8 @@ class _ImagetotextState extends State<Imagetotext> {
   Color dropdowncolor = Colors.grey.shade200;
   Color textcolor = Colors.deepPurpleAccent.shade700;
   Color iconcolor = Colors.deepPurpleAccent.shade700;
-
-  // List<String> languagesfrom = ["English"];
-  // String? selectedfrom = "English";
-
-  // List<String> languagesto = ["Hindi", "Marathi"];
   String? selectedto = "Hindi";
-  int initialindex = 1;
+  int initialindex = 0;
   late File _imagefile;
   final imagepicker = ImagePicker();
   bool isImageLoded = false;
@@ -44,12 +41,11 @@ class _ImagetotextState extends State<Imagetotext> {
   var output;
   final items = <Widget>[
     const Icon(
-      Icons.add_a_photo,
+      Icons.camera,
       color: Colors.deepPurpleAccent,
     ),
-    const Icon(Icons.menu, color: Colors.deepPurple),
-    const Icon(Icons.add_photo_alternate_rounded,
-        color: Colors.deepPurpleAccent),
+    // const Icon(Icons.menu, color: Colors.deepPurple),
+    const Icon(Icons.text_fields_rounded, color: Colors.deepPurpleAccent),
   ];
 
   translate(String text, String lang) async {
@@ -194,13 +190,11 @@ class _ImagetotextState extends State<Imagetotext> {
                                 ),
                                 value: selectedto,
                                 items: Translation_languages.select_languages
-                                    .map((language) =>
-                                        DropdownMenuItem<String>(
+                                    .map((language) => DropdownMenuItem<String>(
                                           value: language,
                                           child: Text(
                                             language,
-                                            style:
-                                                TextStyle(color: textcolor),
+                                            style: TextStyle(color: textcolor),
                                           ),
                                         ))
                                     .toList(),
@@ -219,7 +213,6 @@ class _ImagetotextState extends State<Imagetotext> {
                       ),
                     ),
                   ),
-
                   const SizedBox(
                     height: 50,
                   ),
@@ -312,15 +305,14 @@ class _ImagetotextState extends State<Imagetotext> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
                                   output == null ? "" : output.toString(),
-                                  style: TextStyle(
-                                      color: textcolor, fontSize: 17),
+                                  style:
+                                      TextStyle(color: textcolor, fontSize: 17),
                                 ),
                               )),
                         ),
                       ],
                     ),
                   ),
-                  // Home(finaltext: finaltext)
                 ],
               ),
             ),
@@ -335,22 +327,40 @@ class _ImagetotextState extends State<Imagetotext> {
         items: items,
         onTap: (index) {
           if (index == 0) {
-            output = "";
-
-            finaltext = "";
-            _imageformcamara();
-          } else if (index == 2) {
-            output = "";
-
-            finaltext = "";
-            _imageformgallery();
+          } else if (index == 1) {
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => const TextTranslate()));
           }
         },
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: textfromImage,
-      //   child: Icon(Icons.check_sharp),
-      // ),
+      floatingActionButton: SpeedDial(
+        animatedIcon: AnimatedIcons.menu_close,
+        backgroundColor: textcolor,
+        overlayColor: Colors.black,
+        overlayOpacity: 0.7,
+        children: [
+          SpeedDialChild(
+            child: const Icon(Icons.add_a_photo),
+            label: "Add Image from Camera",
+            onTap: () {
+              output = "";
+
+              finaltext = "";
+              _imageformcamara();
+            },
+          ),
+          SpeedDialChild(
+            child: const Icon(Icons.add_photo_alternate_rounded),
+            label: "Add Image from Gallery",
+            onTap: () {
+              output = "";
+
+              finaltext = "";
+              _imageformgallery();
+            },
+          ),
+        ],
+      ),
     );
   }
 }
