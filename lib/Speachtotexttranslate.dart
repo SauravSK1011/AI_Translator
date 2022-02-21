@@ -1,26 +1,31 @@
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:texttospeachapp/Speachtotexttranslate.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:texttospeachapp/ml.dart';
+import 'package:texttospeachapp/texttranslate.dart';
 import 'package:texttospeachapp/utils/Colors.dart';
 import 'package:texttospeachapp/utils/languages.dart';
 import 'package:translator/translator.dart';
+import 'package:avatar_glow/avatar_glow.dart';
 
-class TextTranslate extends StatefulWidget {
-  const TextTranslate({Key? key}) : super(key: key);
+class SpeachToTextTranslate extends StatefulWidget {
+  const SpeachToTextTranslate({Key? key}) : super(key: key);
 
   @override
-  _TextTranslateState createState() => _TextTranslateState();
+  _SpeachToTextTranslateState createState() => _SpeachToTextTranslateState();
 }
 
-class _TextTranslateState extends State<TextTranslate> {
+class _SpeachToTextTranslateState extends State<SpeachToTextTranslate> {
   String? selectedto = "Hindi";
   bool isTranslate = true;
   var finaltext = "";
+  final stt.SpeechToText _speachtotext = stt.SpeechToText();
 
-  TextEditingController textController = TextEditingController();
-  int initialindex = 1;
+  bool isListening = false;
+  String speechToText = "Press the button and start speaking";
+  // TextEditingController textController = TextEditingController();
+  int initialindex = 2;
   final translator = GoogleTranslator();
   final FlutterTts flutterTts = FlutterTts();
   var output;
@@ -35,6 +40,26 @@ class _TextTranslateState extends State<TextTranslate> {
     await flutterTts.setLanguage(lang);
     await flutterTts.setPitch(0.7);
     await flutterTts.speak(output.toString());
+  }
+
+  listen() async {
+    if (isListening == false) {
+      bool available = await _speachtotext.initialize(
+          onStatus: (value) => print("onStatus: $value"),
+          onError: (value) => print("onError: $value"));
+      if (available) {
+        setState(() {
+          isListening = true;
+        });
+        _speachtotext.listen(onResult: (value) {
+          speechToText = value.recognizedWords;
+        });
+      }
+    } else {
+      setState(() {
+        isListening = false;
+      });
+    }
   }
 
   @override
@@ -61,28 +86,23 @@ class _TextTranslateState extends State<TextTranslate> {
           child: Center(
             child: Column(
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 50,
                 ),
-                TextFormField(
-                  keyboardType: TextInputType.multiline,
-                  maxLines: null,
-                  controller: textController,
-                  style: TextStyle(color: Colors.white, fontSize: 20.0),
-                  decoration: const InputDecoration(
-                    labelText: 'Enter Text to Translate',
-                    labelStyle: TextStyle(fontSize: 20.0, color: Colors.white),
-                    // hintText: "Enter Text",
-                    // hintStyle: TextStyle(fontSize: 20.0, color: Colors.white),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                      borderSide: BorderSide(
-                        color: Colors.deepPurple,
-                      ),
-                    ),
+                Container(
+                  margin: const EdgeInsets.all(15.0),
+                  padding: const EdgeInsets.all(10.0),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.deepPurple,width: 3),borderRadius: BorderRadius.circular(16)),
+                  child: Text(
+                  speechToText,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 20.0,
                   ),
                 ),
-                SizedBox(
+                ),
+                const SizedBox(
                   height: 50,
                 ),
                 Padding(
@@ -100,7 +120,8 @@ class _TextTranslateState extends State<TextTranslate> {
                           Text(
                             "Convert to",
                             style: TextStyle(
-                                color: colorsUsed.textcolor, fontWeight: FontWeight.bold),
+                                color: colorsUsed.textcolor,
+                                fontWeight: FontWeight.bold),
                           ),
                           Container(
                             decoration: BoxDecoration(color: colorsUsed.color),
@@ -113,8 +134,8 @@ class _TextTranslateState extends State<TextTranslate> {
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(10)),
-                                  borderSide:
-                                      BorderSide(width: 5, color: colorsUsed.color),
+                                  borderSide: BorderSide(
+                                      width: 5, color: colorsUsed.color),
                                 ),
                               ),
                               value: selectedto,
@@ -123,7 +144,8 @@ class _TextTranslateState extends State<TextTranslate> {
                                         value: language,
                                         child: Text(
                                           language,
-                                          style: TextStyle(color: colorsUsed.textcolor),
+                                          style: TextStyle(
+                                              color: colorsUsed.textcolor),
                                         ),
                                       ))
                                   .toList(),
@@ -150,7 +172,7 @@ class _TextTranslateState extends State<TextTranslate> {
                     children: [
                       ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            primary:colorsUsed.buttoncolor,
+                            primary: colorsUsed.buttoncolor,
                           ),
                           onPressed: () {
                             setState(() {
@@ -158,7 +180,7 @@ class _TextTranslateState extends State<TextTranslate> {
                             });
                             output = "";
                             setState(() {
-                              finaltext = textController.text;
+                              finaltext = speechToText;
                             });
                             translate(
                                 finaltext,
@@ -187,7 +209,7 @@ class _TextTranslateState extends State<TextTranslate> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Card(
-                            color:colorsUsed.cardcolor,
+                            color: colorsUsed.cardcolor,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8)),
                             elevation: 25,
@@ -195,8 +217,8 @@ class _TextTranslateState extends State<TextTranslate> {
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
                                 output == null ? "" : output.toString(),
-                                style:
-                                    TextStyle(color: colorsUsed.textcolor, fontSize: 17),
+                                style: TextStyle(
+                                    color: colorsUsed.textcolor, fontSize: 17),
                               ),
                             )),
                       ),
@@ -208,6 +230,25 @@ class _TextTranslateState extends State<TextTranslate> {
           ),
         ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: AvatarGlow(
+        animate: isListening,
+        glowColor: colorsUsed.iconcolor,
+        endRadius: 75,
+        duration: Duration(milliseconds: 2000),
+        repeatPauseDuration: Duration(milliseconds: 100),
+        repeat: true,
+        child: FloatingActionButton(backgroundColor: colorsUsed.buttoncolor,
+            onPressed: () {
+              listen();
+            },
+            child: isListening
+                ? Icon(
+                    Icons.mic,
+                    color: colorsUsed.iconcolor,
+                  )
+                : Icon(Icons.mic_none, color: colorsUsed.iconcolor)),
+      ),
       bottomNavigationBar: CurvedNavigationBar(
         color: colorsUsed.bottomcolor,
         index: initialindex,
@@ -218,8 +259,10 @@ class _TextTranslateState extends State<TextTranslate> {
           if (index == 0) {
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => const Imagetotext()));
-          } else if (index == 1) {}else if (index == 2) {Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const SpeachToTextTranslate()));}
+          } else if (index == 1) {
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => const TextTranslate()));
+          } else if (index == 2) {}
         },
       ),
     );

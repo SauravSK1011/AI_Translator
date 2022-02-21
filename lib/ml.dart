@@ -1,8 +1,9 @@
 import 'dart:io';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:texttospeachapp/Speachtotexttranslate.dart';
 import 'package:texttospeachapp/texttranslate.dart';
 import 'package:texttospeachapp/utils/languages.dart';
-
+import 'package:texttospeachapp/utils/Colors.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
@@ -19,14 +20,6 @@ class Imagetotext extends StatefulWidget {
 }
 
 class _ImagetotextState extends State<Imagetotext> {
-  Color color = Colors.grey.shade200;
-  Color buttoncolor = Colors.grey.shade200;
-  Color cardcolor = Colors.grey.shade200;
-  Color appbarbackgroundColor = Colors.grey.shade200;
-  Color bottomcolor = Colors.grey.shade400;
-  Color dropdowncolor = Colors.grey.shade200;
-  Color textcolor = Colors.deepPurpleAccent.shade700;
-  Color iconcolor = Colors.deepPurpleAccent.shade700;
   String? selectedto = "Hindi";
   int initialindex = 0;
   late File _imagefile;
@@ -39,15 +32,6 @@ class _ImagetotextState extends State<Imagetotext> {
   final FlutterTts flutterTts = FlutterTts();
   final translator = GoogleTranslator();
   var output;
-  final items = <Widget>[
-    const Icon(
-      Icons.camera,
-      color: Colors.deepPurpleAccent,
-    ),
-    // const Icon(Icons.menu, color: Colors.deepPurple),
-    const Icon(Icons.text_fields_rounded, color: Colors.deepPurpleAccent),
-  ];
-
   translate(String text, String lang) async {
     await translator.translate(text, to: lang).then((value) {
       setState(() {
@@ -70,7 +54,6 @@ class _ImagetotextState extends State<Imagetotext> {
       setState(() {
         _imagefile = File(image.path);
         isImageLoded = true;
-        initialindex = 1;
       });
     }
   }
@@ -84,7 +67,6 @@ class _ImagetotextState extends State<Imagetotext> {
       setState(() {
         _imagefile = File(image.path);
         isImageLoded = true;
-        initialindex = 1;
       });
     }
   }
@@ -113,11 +95,11 @@ class _ImagetotextState extends State<Imagetotext> {
     return Scaffold(
       extendBody: true,
       appBar: AppBar(
-        backgroundColor: appbarbackgroundColor,
+        backgroundColor:  colorsUsed.appbarbackgroundColor,
         title: Center(
             child: Text(
           "Translator Using ML",
-          style: TextStyle(color: textcolor),
+          style: TextStyle(color: colorsUsed.textcolor),
         )),
       ),
       body: Container(
@@ -155,10 +137,54 @@ class _ImagetotextState extends State<Imagetotext> {
                   const SizedBox(
                     height: 50,
                   ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: colorsUsed.buttoncolor,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        isrecognize = false;
+                      });
+                      output = "";
+                      finaltext = "";
+                      textfromImage();
+                    },
+                    child: isrecognize
+                        ? Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              "recognize",
+                              style: TextStyle(
+                                  color: colorsUsed.textcolor,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          )
+                        : Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: CircularProgressIndicator(
+                              color: colorsUsed.textcolor,
+                            ),
+                          ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Card(
+                        color:colorsUsed.cardcolor,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)),
+                        elevation: 25,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            finaltext,
+                            style: TextStyle(color: colorsUsed.textcolor, fontSize: 17),
+                          ),
+                        )),
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(left: 25, right: 25),
                     child: Card(
-                      color: dropdowncolor,
+                      color: colorsUsed.dropdowncolor,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25)),
                       elevation: 25,
@@ -170,22 +196,22 @@ class _ImagetotextState extends State<Imagetotext> {
                             Text(
                               "Convert to",
                               style: TextStyle(
-                                  color: textcolor,
+                                  color: colorsUsed.textcolor,
                                   fontWeight: FontWeight.bold),
                             ),
                             Container(
-                              decoration: BoxDecoration(color: color),
+                              decoration: BoxDecoration(color:colorsUsed.color),
                               // color: Colors.white,
                               width: 150,
                               child: DropdownButtonFormField<String>(
                                 decoration: InputDecoration(
-                                  hoverColor: color,
-                                  fillColor: color,
+                                  hoverColor: colorsUsed.color,
+                                  fillColor: colorsUsed.color,
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10)),
                                     borderSide:
-                                        BorderSide(width: 5, color: color),
+                                        BorderSide(width: 5, color: colorsUsed.color),
                                   ),
                                 ),
                                 value: selectedto,
@@ -194,7 +220,7 @@ class _ImagetotextState extends State<Imagetotext> {
                                           value: language,
                                           child: Text(
                                             language,
-                                            style: TextStyle(color: textcolor),
+                                            style: TextStyle(color: colorsUsed.textcolor),
                                           ),
                                         ))
                                     .toList(),
@@ -216,56 +242,13 @@ class _ImagetotextState extends State<Imagetotext> {
                   const SizedBox(
                     height: 50,
                   ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: buttoncolor,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        isrecognize = false;
-                      });
-                      output = "";
-                      finaltext = "";
-                      textfromImage();
-                    },
-                    child: isrecognize
-                        ? Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              "recognize",
-                              style: TextStyle(
-                                  color: textcolor,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          )
-                        : Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: CircularProgressIndicator(
-                              color: textcolor,
-                            ),
-                          ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Card(
-                        color: cardcolor,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8)),
-                        elevation: 25,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            finaltext,
-                            style: TextStyle(color: textcolor, fontSize: 17),
-                          ),
-                        )),
-                  ),
+                  
                   Center(
                     child: Column(
                       children: [
                         ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              primary: buttoncolor,
+                              primary: colorsUsed.buttoncolor,
                             ),
                             onPressed: () {
                               setState(() {
@@ -284,20 +267,20 @@ class _ImagetotextState extends State<Imagetotext> {
                                     child: Text(
                                       "Translate",
                                       style: TextStyle(
-                                          color: textcolor,
+                                          color: colorsUsed.textcolor,
                                           fontWeight: FontWeight.bold),
                                     ),
                                   )
                                 : Padding(
                                     padding: EdgeInsets.all(8.0),
                                     child: CircularProgressIndicator(
-                                      color: textcolor,
+                                      color: colorsUsed.textcolor,
                                     ),
                                   )),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Card(
-                              color: cardcolor,
+                              color: colorsUsed.cardcolor,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8)),
                               elevation: 25,
@@ -306,7 +289,7 @@ class _ImagetotextState extends State<Imagetotext> {
                                 child: Text(
                                   output == null ? "" : output.toString(),
                                   style:
-                                      TextStyle(color: textcolor, fontSize: 17),
+                                      TextStyle(color: colorsUsed.textcolor, fontSize: 17),
                                 ),
                               )),
                         ),
@@ -320,22 +303,23 @@ class _ImagetotextState extends State<Imagetotext> {
         ),
       ),
       bottomNavigationBar: CurvedNavigationBar(
-        color: bottomcolor,
+        color:colorsUsed.bottomcolor,
         index: initialindex,
         height: 50,
         backgroundColor: Colors.transparent,
-        items: items,
+        items: iconUsed.items,
         onTap: (index) {
           if (index == 0) {
           } else if (index == 1) {
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => const TextTranslate()));
-          }
+          }else if (index == 2) {Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => const SpeachToTextTranslate()));}
         },
       ),
       floatingActionButton: SpeedDial(
         animatedIcon: AnimatedIcons.menu_close,
-        backgroundColor: textcolor,
+        backgroundColor: colorsUsed.textcolor,
         overlayColor: Colors.black,
         overlayOpacity: 0.7,
         children: [
