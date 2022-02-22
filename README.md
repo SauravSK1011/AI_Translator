@@ -3,15 +3,15 @@
 
 This is a Translator App Which is Build using Flutter, Speech To Text, Google ML Kit, Google Translator and Text To Speech.
 
-<img src=img1.png width="200">
-<img src=img2.png width="200">
-<img src=img3.png width="200">
-<img src=img4.png width="200">
-<img src=img5.png width="200">
-<img src=img6.png width="200">
-<img src=img7.png width="200">
-<img src=img8.png width="200">
-<img src=img9.png width="200">
+<img src=img1.png width="180">
+<img src=img2.png width="180">
+<img src=img3.png width="180">
+<img src=img4.png width="180">
+<img src=img5.png width="180">
+<img src=img6.png width="180">
+<img src=img7.png width="180">
+<img src=img8.png width="180">
+<img src=img9.png width="180">
 
 
 ## Overview
