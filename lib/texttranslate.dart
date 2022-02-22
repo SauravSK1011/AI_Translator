@@ -1,5 +1,6 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:texttospeachapp/Speachtotexttranslate.dart';
 import 'package:texttospeachapp/ml.dart';
@@ -42,10 +43,10 @@ class _TextTranslateState extends State<TextTranslate> {
     return Scaffold(
       extendBody: true,
       appBar: AppBar(
-        backgroundColor: colorsUsed.appbarbackgroundColor,
+        backgroundColor: colorsUsed.bottomcolor,
         title: Center(
             child: Text(
-          "Translator Using ML",
+          "AI Translator",
           style: TextStyle(color: colorsUsed.textcolor),
         )),
       ),
@@ -100,7 +101,8 @@ class _TextTranslateState extends State<TextTranslate> {
                           Text(
                             "Convert to",
                             style: TextStyle(
-                                color: colorsUsed.textcolor, fontWeight: FontWeight.bold),
+                                color: colorsUsed.textcolor,
+                                fontWeight: FontWeight.bold),
                           ),
                           Container(
                             decoration: BoxDecoration(color: colorsUsed.color),
@@ -113,8 +115,8 @@ class _TextTranslateState extends State<TextTranslate> {
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(10)),
-                                  borderSide:
-                                      BorderSide(width: 5, color: colorsUsed.color),
+                                  borderSide: BorderSide(
+                                      width: 5, color: colorsUsed.color),
                                 ),
                               ),
                               value: selectedto,
@@ -123,7 +125,8 @@ class _TextTranslateState extends State<TextTranslate> {
                                         value: language,
                                         child: Text(
                                           language,
-                                          style: TextStyle(color: colorsUsed.textcolor),
+                                          style: TextStyle(
+                                              color: colorsUsed.textcolor),
                                         ),
                                       ))
                                   .toList(),
@@ -150,8 +153,11 @@ class _TextTranslateState extends State<TextTranslate> {
                     children: [
                       ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            primary:colorsUsed.buttoncolor,
-                          ),
+                      shape: new RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(30.0),
+                      ),
+                      primary: colorsUsed.buttoncolor,
+                    ),
                           onPressed: () {
                             setState(() {
                               isTranslate = false;
@@ -184,10 +190,10 @@ class _TextTranslateState extends State<TextTranslate> {
                       SizedBox(
                         height: 50,
                       ),
-                      Padding(
+                      output==null?Container():Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Card(
-                            color:colorsUsed.cardcolor,
+                            color: colorsUsed.cardcolor,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8)),
                             elevation: 25,
@@ -195,11 +201,31 @@ class _TextTranslateState extends State<TextTranslate> {
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
                                 output == null ? "" : output.toString(),
-                                style:
-                                    TextStyle(color: colorsUsed.textcolor, fontSize: 17),
+                                style: TextStyle(
+                                    color: colorsUsed.textcolor, fontSize: 17),
                               ),
                             )),
                       ),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                shape: CircleBorder(),
+                                primary: colorsUsed.iconcolor,
+                              ),
+                              onPressed: () {
+                                Clipboard.setData(
+                                    ClipboardData(text: output.toString()));
+                              },
+                              child: Icon(
+                                Icons.copy,
+                                color: colorsUsed.buttoncolor ,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 50,)
                     ],
                   ),
                 ),
@@ -216,10 +242,31 @@ class _TextTranslateState extends State<TextTranslate> {
         items: iconUsed.items,
         onTap: (index) {
           if (index == 0) {
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const Imagetotext()));
-          } else if (index == 1) {}else if (index == 2) {Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const SpeachToTextTranslate()));}
+            Navigator.pushReplacement(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (context, animation1, animation2) => Imagetotext(),
+                transitionDuration: Duration(seconds: 0),
+              ),
+            );
+
+            // Navigator.pushReplacement(context,
+            //     MaterialPageRoute(builder: (context) => const Imagetotext()));
+          } else if (index == 1) {
+          } else if (index == 2) {
+            Navigator.pushReplacement(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (context, animation1, animation2) => SpeachToTextTranslate(),
+                transitionDuration: Duration(seconds: 0),
+              ),
+            );
+
+            // Navigator.pushReplacement(
+            //     context,
+            //     MaterialPageRoute(
+            //         builder: (context) => const SpeachToTextTranslate()));
+          }
         },
       ),
     );

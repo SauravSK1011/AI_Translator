@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:texttospeachapp/ml.dart';
@@ -45,8 +46,7 @@ class _SpeachToTextTranslateState extends State<SpeachToTextTranslate> {
   listen() async {
     if (isListening == false) {
       bool available = await _speachtotext.initialize(
-          onStatus: (value) => print("onStatus: $value"),
-          onError: (value) => print("onError: $value"));
+          onStatus: (v) => {}, onError: (v) => {});
       if (available) {
         setState(() {
           isListening = true;
@@ -67,10 +67,10 @@ class _SpeachToTextTranslateState extends State<SpeachToTextTranslate> {
     return Scaffold(
       extendBody: true,
       appBar: AppBar(
-        backgroundColor: colorsUsed.appbarbackgroundColor,
+        backgroundColor: colorsUsed.bottomcolor,
         title: Center(
             child: Text(
-          "Translator Using ML",
+          "AI Translator",
           style: TextStyle(color: colorsUsed.textcolor),
         )),
       ),
@@ -93,18 +93,38 @@ class _SpeachToTextTranslateState extends State<SpeachToTextTranslate> {
                   margin: const EdgeInsets.all(15.0),
                   padding: const EdgeInsets.all(10.0),
                   decoration: BoxDecoration(
-                      border: Border.all(color: Colors.deepPurple,width: 3),borderRadius: BorderRadius.circular(16)),
+                      border: Border.all(color: Colors.deepPurple, width: 3),
+                      borderRadius: BorderRadius.circular(16)),
                   child: Text(
-                  speechToText,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 20.0,
+                    speechToText,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20.0,
+                    ),
                   ),
                 ),
-                ),
                 const SizedBox(
-                  height: 50,
+                  height: 10,
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: CircleBorder(),
+                        primary: colorsUsed.buttoncolor,
+                      ),
+                      onPressed: () {
+                        Clipboard.setData(ClipboardData(text: speechToText));
+                      },
+                      child: Icon(
+                        Icons.copy,
+                        color: colorsUsed.iconcolor,
+                      ),
+                    ),
+                  ],
+                ),
+                
                 Padding(
                   padding: const EdgeInsets.only(left: 25, right: 25),
                   child: Card(
@@ -172,6 +192,9 @@ class _SpeachToTextTranslateState extends State<SpeachToTextTranslate> {
                     children: [
                       ElevatedButton(
                           style: ElevatedButton.styleFrom(
+                            shape: new RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(30.0),
+                            ),
                             primary: colorsUsed.buttoncolor,
                           ),
                           onPressed: () {
@@ -206,22 +229,47 @@ class _SpeachToTextTranslateState extends State<SpeachToTextTranslate> {
                       SizedBox(
                         height: 50,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Card(
-                            color: colorsUsed.cardcolor,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
-                            elevation: 25,
-                            child: Padding(
+                      output == null
+                          ? Container()
+                          : Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                output == null ? "" : output.toString(),
-                                style: TextStyle(
-                                    color: colorsUsed.textcolor, fontSize: 17),
-                              ),
-                            )),
+                              child: Card(
+                                  color: colorsUsed.cardcolor,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8)),
+                                  elevation: 25,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      output == null ? "" : output.toString(),
+                                      style: TextStyle(
+                                          color: colorsUsed.textcolor,
+                                          fontSize: 17),
+                                    ),
+                                  )),
+                            ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              shape: CircleBorder(),
+                              primary: colorsUsed.iconcolor,
+                            ),
+                            onPressed: () {
+                              Clipboard.setData(
+                                  ClipboardData(text: output.toString()));
+                            },
+                            child: Icon(
+                              Icons.copy,
+                              color: colorsUsed.buttoncolor,
+                            ),
+                          ),
+                        ],
                       ),
+                      SizedBox(
+                        height: 50,
+                      )
                     ],
                   ),
                 ),
@@ -238,7 +286,8 @@ class _SpeachToTextTranslateState extends State<SpeachToTextTranslate> {
         duration: Duration(milliseconds: 2000),
         repeatPauseDuration: Duration(milliseconds: 100),
         repeat: true,
-        child: FloatingActionButton(backgroundColor: colorsUsed.buttoncolor,
+        child: FloatingActionButton(
+            backgroundColor: colorsUsed.buttoncolor,
             onPressed: () {
               listen();
             },
@@ -257,11 +306,22 @@ class _SpeachToTextTranslateState extends State<SpeachToTextTranslate> {
         items: iconUsed.items,
         onTap: (index) {
           if (index == 0) {
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const Imagetotext()));
+            Navigator.pushReplacement(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (context, animation1, animation2) => Imagetotext(),
+                transitionDuration: Duration(seconds: 0),
+              ),
+            );
           } else if (index == 1) {
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const TextTranslate()));
+            Navigator.pushReplacement(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (context, animation1, animation2) =>
+                    TextTranslate(),
+                transitionDuration: Duration(seconds: 0),
+              ),
+            );
           } else if (index == 2) {}
         },
       ),
