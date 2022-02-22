@@ -1,16 +1,47 @@
-# texttospeachapp
 
-A new Flutter project.
+# AI Translator
 
-## Getting Started
+This is a Translator App Which is Build using Flutter, Speech To Text, Google ML Kit, Google Translator and Text To Speech.
 
-This project is a starting point for a Flutter application.
+<img src=img1.png width="200">
+<img src=img2.png width="200">
+<img src=img3.png width="200">
+<img src=img4.png width="200">
+<img src=img5.png width="200">
+<img src=img6.png width="200">
+<img src=img7.png width="200">
+<img src=img8.png width="200">
+<img src=img9.png width="200">
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+## Overview
+The app provides 3 modes of translation.
+* **Image To Text** provides Image Recognition which converts text in image into text so that user can copy that text and this app translate that text to your known language and read it.
+* **Direct Mode** provides quick and easy translation, much like simple translators.
+* **Voice To Text** provides Speech to text Feature which converts users voice to text and then translate that text to your known language.
+### Features
+* Supports accessibility features like Image-to-text Speech-to-Text and Text-to-Speech
+* Helpful tool to learn new languages, travel and translate on the go
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+ <font size="4"> **Build With**</font> 
+ - [Flutter](https://flutter.dev/)
+ - [Google's ML Kit](https://pub.dev/packages/google_ml_kit)
+ - [Speech To Text](https://pub.dev/packages/speech_to_text)
+ - [Text To Speech](https://pub.dev/packages/flutter_tts)
+ - [Google Translator](https://pub.dev/packages/translator)
+## Installation
+
+Cloning this repository
+
+```bash
+  $ git clone https://github.com/SauravSK1011/AI_Translator.git
+```
+**Installing dependencies**
+```bash
+flutter pub get
+```
+
+With all dependencies installed  you can run the app
+ ```bash
+flutter run
+```
