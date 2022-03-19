@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:texttospeachapp/home.dart';
-import 'package:texttospeachapp/ml.dart';
+import 'package:texttospeachapp/splash_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +14,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Imagetotext(),
+      home: SplashScreen(),
       
     );
     

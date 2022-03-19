@@ -76,10 +76,11 @@ class _ImagetotextState extends State<Imagetotext> {
     //     FirebaseVisionImage.fromFile(_imagefile);
     // TextRecognizer textRecognizer = FirebaseVision.instance.textRecognizer();
     // VisionText outputtext = await textRecognizer.processImage(selectedimage);
-    final inputimg = InputImage.fromFilePath(_imagefile.path);
+    try {
+      final inputimg = InputImage.fromFilePath(_imagefile.path);
+      
     final textdectctor = GoogleMlKit.vision.textDetector();
     final RecognisedText outputtext = await textdectctor.processImage(inputimg);
-
     for (TextBlock blocks in outputtext.blocks) {
       for (TextLine line in blocks.lines) {
         for (TextElement word in line.elements) {
@@ -89,6 +90,9 @@ class _ImagetotextState extends State<Imagetotext> {
         }
       }
     }
+    } catch (e) {}
+
+    
     setState(() {
       isrecognize = true;
     });
@@ -175,22 +179,25 @@ class _ImagetotextState extends State<Imagetotext> {
                             ),
                           ),
                   ),
-                  finaltext.length==0?Container():Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Card(
-                        color: colorsUsed.cardcolor,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8)),
-                        elevation: 25,
-                        child: Padding(
+                  finaltext.length == 0
+                      ? Container()
+                      : Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            finaltext,
-                            style: TextStyle(
-                                color: colorsUsed.textcolor, fontSize: 17),
-                          ),
-                        )),
-                  ),
+                          child: Card(
+                              color: colorsUsed.cardcolor,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                              elevation: 25,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  finaltext,
+                                  style: TextStyle(
+                                      color: colorsUsed.textcolor,
+                                      fontSize: 17),
+                                ),
+                              )),
+                        ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -425,3 +432,4 @@ class _ImagetotextState extends State<Imagetotext> {
     );
   }
 }
+
