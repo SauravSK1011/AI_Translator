@@ -42,14 +42,14 @@ class _TextTranslateState extends State<TextTranslate> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
-      appBar: AppBar(
-        backgroundColor: colorsUsed.bottomcolor,
-        title: Center(
-            child: Text(
-          "AI Translator",
-          style: TextStyle(color: colorsUsed.textcolor),
-        )),
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: colorsUsed.bottomcolor,
+      //   title: Center(
+      //       child: Text(
+      //     "AI Translator",
+      //     style: TextStyle(color: colorsUsed.textcolor),
+      //   )),
+      // ),
       body: Container(
         height: MediaQuery.of(context).size.height,
         decoration: const BoxDecoration(
@@ -234,41 +234,41 @@ class _TextTranslateState extends State<TextTranslate> {
           ),
         ),
       ),
-      bottomNavigationBar: CurvedNavigationBar(
-        color: colorsUsed.bottomcolor,
-        index: initialindex,
-        height: 50,
-        backgroundColor: Colors.transparent,
-        items: iconUsed.items,
-        onTap: (index) {
-          if (index == 0) {
-            Navigator.pushReplacement(
-              context,
-              PageRouteBuilder(
-                pageBuilder: (context, animation1, animation2) => Imagetotext(),
-                transitionDuration: Duration(seconds: 0),
-              ),
-            );
+      // bottomNavigationBar: CurvedNavigationBar(
+      //   color: colorsUsed.bottomcolor,
+      //   index: initialindex,
+      //   height: 50,
+      //   backgroundColor: Colors.transparent,
+      //   items: iconUsed.items,
+      //   onTap: (index) {
+      //     if (index == 0) {
+      //       Navigator.pushReplacement(
+      //         context,
+      //         PageRouteBuilder(
+      //           pageBuilder: (context, animation1, animation2) => Imagetotext(),
+      //           transitionDuration: Duration(seconds: 0),
+      //         ),
+      //       );
 
-            // Navigator.pushReplacement(context,
-            //     MaterialPageRoute(builder: (context) => const Imagetotext()));
-          } else if (index == 1) {
-          } else if (index == 2) {
-            Navigator.pushReplacement(
-              context,
-              PageRouteBuilder(
-                pageBuilder: (context, animation1, animation2) => SpeachToTextTranslate(),
-                transitionDuration: Duration(seconds: 0),
-              ),
-            );
+      //       // Navigator.pushReplacement(context,
+      //       //     MaterialPageRoute(builder: (context) => const Imagetotext()));
+      //     } else if (index == 1) {
+      //     } else if (index == 2) {
+      //       Navigator.pushReplacement(
+      //         context,
+      //         PageRouteBuilder(
+      //           pageBuilder: (context, animation1, animation2) => SpeachToTextTranslate(),
+      //           transitionDuration: Duration(seconds: 0),
+      //         ),
+      //       );
 
-            // Navigator.pushReplacement(
-            //     context,
-            //     MaterialPageRoute(
-            //         builder: (context) => const SpeachToTextTranslate()));
-          }
-        },
-      ),
+      //       // Navigator.pushReplacement(
+      //       //     context,
+      //       //     MaterialPageRoute(
+      //       //         builder: (context) => const SpeachToTextTranslate()));
+      //     }
+      //   },
+      // ),
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:texttospeachapp/home.dart';
 import 'package:texttospeachapp/home_page.dart';
 import 'package:texttospeachapp/ml.dart';
 
@@ -41,7 +42,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   secondpage() {
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => Imagetotext()));
+        context, MaterialPageRoute(builder: (context) => HomePage()));
   }
 
   @override

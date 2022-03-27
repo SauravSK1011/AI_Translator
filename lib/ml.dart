@@ -78,21 +78,21 @@ class _ImagetotextState extends State<Imagetotext> {
     // VisionText outputtext = await textRecognizer.processImage(selectedimage);
     try {
       final inputimg = InputImage.fromFilePath(_imagefile.path);
-      
-    final textdectctor = GoogleMlKit.vision.textDetector();
-    final RecognisedText outputtext = await textdectctor.processImage(inputimg);
-    for (TextBlock blocks in outputtext.blocks) {
-      for (TextLine line in blocks.lines) {
-        for (TextElement word in line.elements) {
-          setState(() {
-            finaltext = finaltext + " " + word.text;
-          });
+
+      final textdectctor = GoogleMlKit.vision.textDetector();
+      final RecognisedText outputtext =
+          await textdectctor.processImage(inputimg);
+      for (TextBlock blocks in outputtext.blocks) {
+        for (TextLine line in blocks.lines) {
+          for (TextElement word in line.elements) {
+            setState(() {
+              finaltext = finaltext + " " + word.text;
+            });
+          }
         }
       }
-    }
     } catch (e) {}
 
-    
     setState(() {
       isrecognize = true;
     });
@@ -102,14 +102,14 @@ class _ImagetotextState extends State<Imagetotext> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
-      appBar: AppBar(
-        backgroundColor: colorsUsed.bottomcolor,
-        title: Center(
-            child: Text(
-          "AI Translator",
-          style: TextStyle(color: colorsUsed.textcolor),
-        )),
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: colorsUsed.bottomcolor,
+      //   title: Center(
+      //       child: Text(
+      //     "AI Translator",
+      //     style: TextStyle(color: colorsUsed.textcolor),
+      //   )),
+      // ),
       body: Container(
         // height: MediaQuery.of(context).size.height + 600,
         decoration: const BoxDecoration(
@@ -366,70 +366,77 @@ class _ImagetotextState extends State<Imagetotext> {
           ),
         ),
       ),
-      bottomNavigationBar: CurvedNavigationBar(
-        color: colorsUsed.bottomcolor,
-        index: initialindex,
-        height: 50,
-        backgroundColor: Colors.transparent,
-        items: iconUsed.items,
-        onTap: (index) {
-          if (index == 0) {
-          } else if (index == 1) {
-            Navigator.pushReplacement(
-              context,
-              PageRouteBuilder(
-                pageBuilder: (context, animation1, animation2) =>
-                    TextTranslate(),
-                transitionDuration: Duration(seconds: 0),
-              ),
-            );
-            // Navigator.pushReplacement(context,
-            //     MaterialPageRoute(builder: (context) => const TextTranslate()));
-          } else if (index == 2) {
-            Navigator.pushReplacement(
-              context,
-              PageRouteBuilder(
-                pageBuilder: (context, animation1, animation2) =>
-                    SpeachToTextTranslate(),
-                transitionDuration: Duration(seconds: 0),
-              ),
-            );
-            // Navigator.pushReplacement(
-            //     context,
-            //     MaterialPageRoute(
-            //         builder: (context) => const SpeachToTextTranslate()));
-          }
-        },
-      ),
-      floatingActionButton: SpeedDial(
-        animatedIcon: AnimatedIcons.menu_close,
-        backgroundColor: colorsUsed.textcolor,
-        overlayColor: Colors.black,
-        overlayOpacity: 0.7,
+      // bottomNavigationBar: CurvedNavigationBar(
+      //   color: colorsUsed.bottomcolor,
+      //   index: initialindex,
+      //   height: 50,
+      //   backgroundColor: Colors.transparent,
+      //   items: iconUsed.items,
+      //   onTap: (index) {
+      //     if (index == 0) {
+      //     } else if (index == 1) {
+      //       Navigator.pushReplacement(
+      //         context,
+      //         PageRouteBuilder(
+      //           pageBuilder: (context, animation1, animation2) =>
+      //               TextTranslate(),
+      //           transitionDuration: Duration(seconds: 0),
+      //         ),
+      //       );
+      //       // Navigator.pushReplacement(context,
+      //       //     MaterialPageRoute(builder: (context) => const TextTranslate()));
+      //     } else if (index == 2) {
+      //       Navigator.pushReplacement(
+      //         context,
+      //         PageRouteBuilder(
+      //           pageBuilder: (context, animation1, animation2) =>
+      //               SpeachToTextTranslate(),
+      //           transitionDuration: Duration(seconds: 0),
+      //         ),
+      //       );
+      //       // Navigator.pushReplacement(
+      //       //     context,
+      //       //     MaterialPageRoute(
+      //       //         builder: (context) => const SpeachToTextTranslate()));
+      //     }
+      //   },
+      // ),
+      floatingActionButton: Column(
         children: [
-          SpeedDialChild(
-            child: const Icon(Icons.add_a_photo),
-            label: "Add Image from Camera",
-            onTap: () {
-              output = "";
-
-              finaltext = "";
-              _imageformcamara();
-            },
+          SizedBox(
+            height: MediaQuery.of(context).size.height - 186,
           ),
-          SpeedDialChild(
-            child: const Icon(Icons.add_photo_alternate_rounded),
-            label: "Add Image from Gallery",
-            onTap: () {
-              output = "";
+          SpeedDial(
+            animatedIcon: AnimatedIcons.menu_close,
+            backgroundColor: colorsUsed.textcolor,
+            overlayColor: Colors.black,
+            overlayOpacity: 0.7,
+            children: [
+              SpeedDialChild(
+                child: const Icon(Icons.add_a_photo),
+                label: "Add Image from Camera",
+                onTap: () {
+                  output = "";
 
-              finaltext = "";
-              _imageformgallery();
-            },
+                  finaltext = "";
+                  _imageformcamara();
+                },
+              ),
+              SpeedDialChild(
+                child: const Icon(Icons.add_photo_alternate_rounded),
+                label: "Add Image from Gallery",
+                onTap: () {
+                  output = "";
+
+                  finaltext = "";
+                  _imageformgallery();
+                },
+              ),
+            ],
           ),
         ],
       ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
     );
   }
 }
-

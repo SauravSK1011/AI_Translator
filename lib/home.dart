@@ -1,48 +1,79 @@
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_tts/flutter_tts.dart';
-import 'package:translator/translator.dart';
+import 'package:texttospeachapp/Speachtotexttranslate.dart';
+import 'package:texttospeachapp/ml.dart';
+import 'package:texttospeachapp/texttranslate.dart';
+import 'package:texttospeachapp/utils/Colors.dart';
 
-class Home extends StatefulWidget {
-  Home({Key? key, required this.finaltext}) : super(key: key);
-  String finaltext;
+class HomePage extends StatefulWidget {
+  HomePage({Key? key}) : super(key: key);
+  
   @override
-  State<Home> createState() => _HomeState();
+  State<HomePage> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
-  final TextEditingController textEditingController = TextEditingController();
-  final FlutterTts flutterTts = FlutterTts();
-  final translator = GoogleTranslator();
-  var output;
-  translate(String text) async {
-    await translator.translate(text, to: "hi").then((value) {
-      setState(() {
-        output = value;
-      });
-    });
-    await flutterTts.setLanguage("hi-IN");
-    await flutterTts.setPitch(1.4);
-    await flutterTts.speak(output.toString());
-  }
+class _HomeState extends State<HomePage> {
+  var initialindex = 1;
+  var currentindex = 1;
+  var screens = [
+    const Imagetotext(),
+    const TextTranslate(),
+    const SpeachToTextTranslate()
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        child: Center(
-          child: Column(
-            children: [
-              ElevatedButton(
-                  onPressed: () {
-                    translate(widget.finaltext);
-                  },
-                  child: Text("Translate")),
-              Text(
-                output == null ? "" : output.toString(),
-              ),
-            ],
-          ),
-        ),
+    return Scaffold(
+      extendBody: true,
+      appBar: AppBar(
+        backgroundColor: colorsUsed.bottomcolor,
+        title: Center(
+            child: Text(
+          "AI Translator",
+          style: TextStyle(color: colorsUsed.textcolor),
+        )),
+      ),
+      body: screens[currentindex],
+      bottomNavigationBar: CurvedNavigationBar(
+        
+        color: colorsUsed.bottomcolor,
+        index: initialindex,
+        height: 50,
+        backgroundColor: Colors.transparent,
+        items: iconUsed.items,
+        onTap: (index) {
+          setState(() {
+                      currentindex = index;
+
+          });
+
+          // if (index == 0) {
+          // } else if (index == 1) {
+          //   Navigator.pushReplacement(
+          //     context,
+          //     PageRouteBuilder(
+          //       pageBuilder: (context, animation1, animation2) =>
+          //           TextTranslate(),
+          //       transitionDuration: Duration(seconds: 0),
+          //     ),
+          //   );
+          //   // Navigator.pushReplacement(context,
+          //   //     MaterialPageRoute(builder: (context) => const TextTranslate()));
+          // } else if (index == 2) {
+          //   Navigator.pushReplacement(
+          //     context,
+          //     PageRouteBuilder(
+          //       pageBuilder: (context, animation1, animation2) =>
+          //           SpeachToTextTranslate(),
+          //       transitionDuration: Duration(seconds: 0),
+          //     ),
+          //   );
+          // Navigator.pushReplacement(
+          //     context,
+          //     MaterialPageRoute(
+          //         builder: (context) => const SpeachToTextTranslate()));
+          // }
+        },
       ),
     );
   }
