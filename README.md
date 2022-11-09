@@ -9,7 +9,7 @@ This is a Translator App Which is Build using Flutter, Speech To Text, Google ML
 
 *****
 
-### **Download App** :- https://drive.google.com/drive/folders/1W-_wq9NGHBevRyjC-RfWTx8rKxep9ghG?usp=sharing
+### **Download App** :- https://www.amazon.com/SSK-AI-Translator/dp/B0BC4LX1N6/ref=sr_1_4?crid=3F5BTUKX3S2Z9&keywords=ai+translator+app&qid=1668003608&sprefix=ai+translator+app%2Caps%2C296&sr=8-4
 *****
 
 ## Overview
